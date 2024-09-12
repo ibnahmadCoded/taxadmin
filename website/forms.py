@@ -3,8 +3,7 @@ from wtforms import StringField, DateField, SelectField
 from wtforms.validators import DataRequired
 
 # Create the Appointment form
-class AppointmentForm(FlaskForm):
-    name = StringField("Name", validators=[DataRequired()])
+class InboundMailAppointmentForm(FlaskForm):
     company_name = StringField(
         "Company Name (not Consulting company if applicable)", validators=[DataRequired()]
     )

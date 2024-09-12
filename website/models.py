@@ -1,13 +1,11 @@
 from . import db
 from flask_admin import Admin
-from wtforms import ValidationError  
 from flask_admin.contrib.sqla import ModelView
-
+from .admin_metrics import CustomAdminIndexView  # Import the custom admin view
 
 # Define the Appointment model
-class Appointment(db.Model):
+class InboundMails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
     company_name = db.Column(db.String(100), nullable=False)
     letter_title = db.Column(db.String(100), nullable=False)
     appointment_date = db.Column(db.Date, nullable=False)
@@ -17,12 +15,10 @@ class Appointment(db.Model):
     received = db.Column(db.Boolean, default=False)  
 
     def __repr__(self):
-        return f"<Appointment {self.name} - {self.company_name}>"
+        return f"<Appointment {self.company_name}>"
 
-# Set up the admin interface for appointments
-class AppointmentAdmin(ModelView):
+class InboundMailsAdmin(ModelView):
     form_columns = [
-        "name",
         "company_name",
         "letter_title",
         "appointment_date",
@@ -32,14 +28,11 @@ class AppointmentAdmin(ModelView):
         "received",      
     ]
 
-    # Prevent editing if the appointment is marked as received
-    def on_model_change(self, form, model, is_created):
-        if model.received:
-            raise ValidationError("This entry has been marked as received and cannot be edited.")
+    # Set the name to be displayed in the admin interface
+    def __init__(self, session, **kwargs):
+        super().__init__(InboundMails, session, **kwargs)
+        self.name = 'Inbound Mails'
 
-    column_editable_list = ['received']  # Allow editing the 'received' field
-
-# Function to set up the admin
 def setup_admin(app):
-    admin = Admin(app, name="Admin Dashboard", template_mode="bootstrap3")
-    admin.add_view(AppointmentAdmin(Appointment, db.session))
+    admin = Admin(app, name="TaxAdmin Dashboard", template_mode="bootstrap3", index_view=CustomAdminIndexView())
+    admin.add_view(InboundMailsAdmin(db.session))

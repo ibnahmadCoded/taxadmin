@@ -1,0 +1,101 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Metrics</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Inbound Mails</h3>
+            <ul class="list-unstyled">
+                <li><strong>Today:</strong> {{ mails_today }}</li>
+                <li><strong>This Week:</strong> {{ mails_this_week }}</li>
+                <li><strong>This Month:</strong> {{ mails_this_month }}</li>
+                <li><strong>This Year:</strong> {{ mails_this_year }}</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Top 5 Recipients (This Month)</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Recipient</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipient, count in recipient_counts_month %}
+                    <tr>
+                        <td>{{ recipient }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Top 5 Recipients (This Year)</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Recipient</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipient, count in recipient_counts_year %}
+                    <tr>
+                        <td>{{ recipient }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3>Pending Appointments</h3>
+            <ul class="list-unstyled">
+                <li><strong>Today:</strong> {{ pending_today }}</li>
+                <li><strong>This Week:</strong> {{ pending_this_week }}</li>
+                <li><strong>This Month:</strong> {{ pending_this_month }}</li>
+                <li><strong>This Year:</strong> {{ pending_this_year }}</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Top 5 Companies (This Month)</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company, count in company_counts_month %}
+                    <tr>
+                        <td>{{ company }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Top 5 Companies (This Year)</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company, count in company_counts_year %}
+                    <tr>
+                        <td>{{ company }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

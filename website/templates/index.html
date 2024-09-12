@@ -1,117 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book an Appointment</title>
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background-color: #f4f6f9;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      }
-      .container {
-        max-width: 600px;
-        margin-top: 50px;
-      }
-      .form-header {
-        text-align: center;
-        margin-bottom: 30px;
-      }
-      .form-header h1 {
-        color: #343a40;
-        font-weight: 700;
-      }
-      .form-control {
-        border-radius: 8px;
-        border: 1px solid #ced4da;
-        padding: 10px;
-      }
-      .form-group label {
-        font-weight: bold;
-        color: #495057;
-      }
-      .btn-custom {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: white;
-        border-radius: 30px;
-        padding: 10px 20px;
-        font-weight: 500;
-      }
-      .btn-custom:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
-      }
-      .footer {
-        text-align: center;
-        margin-top: 50px;
-        color: #6c757d;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <div class="form-header">
-            <h1>Book an Appointment</h1>
-            <p class="text-muted">Fill out the form to schedule your appointment.</p>
-          </div>
-          <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-              {{ form.name.label(class_="form-label") }}
-              {{ form.name(class_="form-control", size=40) }}
-            </div>
-            <div class="form-group">
-              {{ form.company_name.label(class_="form-label") }}
-              {{ form.company_name(class_="form-control", size=40) }}
-            </div>
-            <div class="form-group">
-              {{ form.letter_title.label(class_="form-label") }}
-              {{ form.letter_title(class_="form-control", size=40) }}
-            </div>
-            <div class="form-group">
-              {{ form.appointment_date.label(class_="form-label") }}
-              {{ form.appointment_date(class_="form-control") }}
-            </div>
-            <div class="form-group">
-              {{ form.office.label(class_="form-label") }}
-              {{ form.office(class_="form-control") }}
-            </div>
-            <div class="form-group text-center">
-              <button type="submit" class="btn btn-custom btn-block">
-                Submit
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="footer">
-        <p>Powered by <strong>Imosyn</strong> | © 2024</p>
-      </div>
-    </div>
+{% extends "base.html" %}
 
-    <!-- Bootstrap JS and dependencies -->
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.0/dist/umd/popper.min.js"
-      integrity="sha384-KsvlT1yEdZJlgIbvFI/4gB6+fvzTKo/ISjEWTM3OU+EdnH0BQDVjfp9PpZgp4g/3"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-      integrity="sha384-B4gt1jrGC7Jh4AgPsF5pWnPi9Ej1iMbB0Fw5BX5J8ujNoo+LXgsUlzBb63P2uhaU"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+{% block title %}
+Book an Appointment for Company Mail
+{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="form-header">
+      <h1>Book an Appointment for Mail Sumission</h1>
+      <p class="text-muted">Fill out the form to schedule your appointment.</p>
+    </div>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        {{ form.company_name.label(class_="form-label") }}
+        {{ form.company_name(class_="form-control", size=40) }}
+      </div>
+      <div class="form-group">
+        {{ form.letter_title.label(class_="form-label") }}
+        {{ form.letter_title(class_="form-control", size=40) }}
+      </div>
+      <div class="form-group">
+        {{ form.appointment_date.label(class_="form-label") }}
+        {{ form.appointment_date(class_="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.office.label(class_="form-label") }}
+        {{ form.office(class_="form-control") }}
+      </div>
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-custom btn-block">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
