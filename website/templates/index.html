@@ -5,36 +5,168 @@ Book an Appointment for Company Mail
 {% endblock %}
 
 {% block content %}
-<div class="card shadow-sm">
-  <div class="card-body">
-    <div class="form-header">
-      <h1>Book an Appointment for Mail Sumission</h1>
-      <p class="text-muted">Fill out the form to schedule your appointment.</p>
+<div class="row">
+  <!-- Form Column -->
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="form-header">
+          <h1>Book an Appointment with FIRS</h1>
+          <p class="text-muted">Fill out the form to schedule your appointment.</p>
+        </div>
+
+        <form method="POST">
+          {{ form.hidden_tag() }}
+
+          <!-- Company Name Field -->
+          <div class="form-group">
+            {{ form.company_name.label(class_="form-label") }}
+            {{ form.company_name(class_="form-control", size=40) }}
+          </div>
+
+          <!-- Company TIN Field -->
+          <div class="form-group">
+            {{ form.company_tin.label(class_="form-label") }}
+            {{ form.company_tin(class_="form-control", size=40) }}
+          </div>
+
+          <!-- Company Address Field -->
+          <div class="form-group">
+            {{ form.company_address.label(class_="form-label") }}
+            {{ form.company_address(class_="form-control", rows=2) }}
+          </div>
+
+          <!-- Contact Number Field -->
+          <div class="form-group">
+            {{ form.contact_number.label(class_="form-label") }}
+            {{ form.contact_number(class_="form-control", size=40) }}
+          </div>
+
+          <!-- Appointment Reason (Checkboxes) -->
+          <div class="form-group">
+            <label class="form-label">Appointment Reason</label><br>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="mail_letter" name="mail_letter" value="y" onclick="toggleFields()">
+              <label class="form-check-label" for="mail_letter">Mail/Letter</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="vat" name="vat" value="y" onclick="toggleFields()">
+              <label class="form-check-label" for="vat">VAT</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="wht" name="wht" value="y" onclick="toggleFields()">
+              <label class="form-check-label" for="wht">WHT</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="annual_return" name="annual_return" value="y" onclick="toggleFields()">
+              <label class="form-check-label" for="annual_return">Annual Return</label>
+            </div>
+          </div>
+
+          <!-- Letter Title Field (Initially Hidden) -->
+          <div class="form-group" id="letter_title_field" style="display: none;">
+            {{ form.letter_title.label(class_="form-label") }}
+            {{ form.letter_title(class_="form-control", size=40) }}
+          </div>
+
+          <!-- VAT Fields (Initially Hidden) -->
+          <div id="vat_fields" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">VAT Amount</label>
+              <input type="text" class="form-control" name="vat_amount">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bank</label>
+              <input type="text" class="form-control" name="vat_bank">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Period Covered</label>
+              <input type="text" class="form-control" name="vat_period_covered">
+            </div>
+          </div>
+
+          <!-- WHT Fields (Initially Hidden) -->
+          <div id="wht_fields" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">WHT Amount</label>
+              <input type="text" class="form-control" name="wht_amount">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bank</label>
+              <input type="text" class="form-control" name="wht_bank">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Period Covered</label>
+              <input type="text" class="form-control" name="wht_period_covered">
+            </div>
+          </div>
+
+          <!-- Annual Returns Field (Initially Hidden) -->
+          <div id="annual_return_field" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">Tax Period</label>
+              <input type="text" class="form-control" name="tax_period">
+            </div>
+          </div>
+
+          <!-- Appointment Date Field -->
+          <div class="form-group">
+            {{ form.appointment_date.label(class_="form-label") }}
+            {{ form.appointment_date(class_="form-control") }}
+          </div>
+
+          <!-- Office Field -->
+          <div class="form-group">
+            {{ form.office.label(class_="form-label") }}
+            {{ form.office(class_="form-control") }}
+          </div>
+
+          <!-- Submit Button with Color -->
+          <div class="form-group text-center">
+            <button type="submit" class="btn btn-custom btn-block" style="background-color: #4CAF50; color: white;">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    <form method="POST">
-      {{ form.hidden_tag() }}
-      <div class="form-group">
-        {{ form.company_name.label(class_="form-label") }}
-        {{ form.company_name(class_="form-control", size=40) }}
+  </div>
+
+  <!-- Instructions Column -->
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5>Instructions</h5>
+        <ul class="text-muted">
+          <li>If you are representing a company as a consultant, please use the name of the company you are consulting for in the company name field.</li>
+          <li>Select every option possible. For example, if the reason for your appointment is VAT and there is a letter accompanying the VAT form, please select VAT and mail/letter.</li>
+          <li>Although we attend to individuals on a first come first serve basis, priority will be given to those who have booked an appointment. This will make our work faster and also means you get to spend less time at our desk.</li>
+          <li>Thank you!</li>
+        </ul>
       </div>
-      <div class="form-group">
-        {{ form.letter_title.label(class_="form-label") }}
-        {{ form.letter_title(class_="form-control", size=40) }}
-      </div>
-      <div class="form-group">
-        {{ form.appointment_date.label(class_="form-label") }}
-        {{ form.appointment_date(class_="form-control") }}
-      </div>
-      <div class="form-group">
-        {{ form.office.label(class_="form-label") }}
-        {{ form.office(class_="form-control") }}
-      </div>
-      <div class="form-group text-center">
-        <button type="submit" class="btn btn-custom btn-block">
-          Submit
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>
+
+<script>
+  // Function to toggle the visibility of the fields based on checkbox selections
+  function toggleFields() {
+    var vatCheckbox = document.getElementById("vat");
+    var whtCheckbox = document.getElementById("wht");
+    var annualReturnCheckbox = document.getElementById("annual_return");
+
+    // Toggle VAT fields
+    document.getElementById("vat_fields").style.display = vatCheckbox.checked ? "block" : "none";
+    
+    // Toggle WHT fields
+    document.getElementById("wht_fields").style.display = whtCheckbox.checked ? "block" : "none";
+    
+    // Toggle Annual Return fields
+    document.getElementById("annual_return_field").style.display = annualReturnCheckbox.checked ? "block" : "none";
+    
+    // Show/Hide Letter Title field
+    var mailLetterCheckbox = document.getElementById("mail_letter");
+    document.getElementById("letter_title_field").style.display = mailLetterCheckbox.checked ? "block" : "none";
+  }
+</script>
 {% endblock %}
