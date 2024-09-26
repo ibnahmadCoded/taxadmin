@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, DateField, BooleanField, SelectField, DecimalField, SubmitField
-from wtforms.validators import DataRequired, Optional, NumberRange
+from wtforms import StringField, TextAreaField, DateField, BooleanField, SelectField, DecimalField, SubmitField, PasswordField
+from wtforms.validators import DataRequired, Optional, NumberRange, EqualTo, Email
 
 class InboundMailAppointmentForm(FlaskForm):
     company_name = StringField('Company Name', validators=[DataRequired()])
@@ -33,3 +33,18 @@ class InboundMailAppointmentForm(FlaskForm):
     tax_period = StringField('Tax Period', validators=[Optional()])
     
     submit = SubmitField('Submit')
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
+
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    is_superuser = BooleanField('Superuser')
+    submit = SubmitField('Register')

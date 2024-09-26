@@ -1,8 +1,20 @@
 from . import db
-from flask_admin import Admin
 from sqlalchemy import Numeric
-from flask_admin.contrib.sqla import ModelView
-from .admin_metrics import CustomAdminIndexView  # Import the custom admin view
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    is_superuser = db.Column(db.Boolean, default=False)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 # Define the Appointment model
 class InboundMails(db.Model):
@@ -139,192 +151,3 @@ class TCCApplications(db.Model):
 
     def __repr__(self):
         return f"<TCCApplications {self.company_name}>"
-
-
-
-class InboundMailsAdmin(ModelView):
-    form_columns = ["company_name",
-        "company_tin",  
-        "company_address",  
-        "contact_number",  
-        "letter_title",
-        "appointment_date",
-        "receipt_date", 
-        "office",        
-        "recipient",     
-        "received",      
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(InboundMails, session, **kwargs)
-        self.name = 'Inbound Mails'
-
-# VAT Admin View
-class VATAdmin(ModelView):
-    form_columns = [
-        "tin",
-        "company_name",
-        "company_address",
-        "contact_number",
-        "currency",
-        "amount",
-        "bank",
-        "period_covered",
-        "appointment_date", 
-        "receipt_date",
-        "received" 
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(VAT, session, **kwargs)
-        self.name = 'Value Added Tax'
-
-# WHT Admin View
-class WHTAdmin(ModelView):
-    form_columns = [
-        "tin",
-        "company_name",
-        "company_address",
-        "contact_number",
-        "currency",
-        "amount",
-        "bank",
-        "period_covered",
-        "appointment_date", 
-        "receipt_date",
-        "received"
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(WHT, session, **kwargs)
-        self.name = 'Witholding Tax'
-
-# Outgoing Files Admin View
-class OutgoingFilesAdmin(ModelView):
-    form_columns = [
-        "tin",
-        "company_name",
-        "office_transferred_to",
-        "pnj",
-        "assmt",
-        "vat",
-        "wht",
-        "coll",
-        "remark",
-        "sent_by",
-        "date",
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(OutgoingFiles, session, **kwargs)
-        self.name = 'Outgoing Files'
-
-# Incoming Files Admin View
-class IncomingFilesAdmin(ModelView):
-    form_columns = [
-        "tin",
-        "company_name",
-        "office_transferred_from",
-        "pnj",
-        "assmt",
-        "vat",
-        "wht",
-        "coll",
-        "remark",
-        "received_by",
-        "date",
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(IncomingFiles, session, **kwargs)
-        self.name = 'Incoming Files'
-
-# New File Opening Admin View
-class NewFileOpeningAdmin(ModelView):
-    form_columns = [
-        "tin",
-        "company_name",
-        "file_type",  # Renamed to 'file_type' for clarity
-        "opened_by",
-        "date",
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(NewFileOpening, session, **kwargs)
-        self.name = 'New File Opening'
-
-# Document Dispatch Admin View
-class DocumentDispatchAdmin(ModelView):
-    form_columns = [
-        "company_name",
-        "office_to_dispatch_to",
-        "item",
-        "date_of_dispatch",
-        "date_of_acknowledgement",
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(DocumentDispatch, session, **kwargs)
-        self.name = 'Document Dispatch'
-
-# Annual Returns Admin View
-class AnnualReturnsAdmin(ModelView):
-    form_columns = [
-        "tin",
-        "company_name",
-        "address",
-        "tax_period",
-        "appointment_date", 
-        "receipt_date",
-        "received"
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(AnnualReturns, session, **kwargs)
-        self.name = 'Annual Returns'
-
-# TCC Applications Admin View
-class TCCApplicationsAdmin(ModelView):
-    form_columns = [
-        "date_application_received",
-        "company_name",
-        "address",
-        "nature_of_business",
-        "tin",
-        "tcc_granted",
-        "date_granted_rejected",
-        "ground_for_rejection",
-        "date_tcc_issued",
-    ]
-
-    # Set the name to be displayed in the admin interface
-    def __init__(self, session, **kwargs):
-        super().__init__(TCCApplications, session, **kwargs)
-        self.name = 'TCC Application'
-
-# Setup Flask-Admin and add all views
-def setup_admin(app):
-    admin = Admin(app, name="TaxAdmin Dashboard", template_mode="bootstrap3", index_view=CustomAdminIndexView())
-    
-    # Add each admin view for all models
-    admin.add_view(InboundMailsAdmin(db.session))  # Existing
-    admin.add_view(VATAdmin(db.session))
-    admin.add_view(WHTAdmin(db.session))
-    admin.add_view(OutgoingFilesAdmin(db.session))
-    admin.add_view(IncomingFilesAdmin(db.session))
-    admin.add_view(NewFileOpeningAdmin(db.session))
-    admin.add_view(DocumentDispatchAdmin(db.session))
-    admin.add_view(AnnualReturnsAdmin(db.session))
-    admin.add_view(TCCApplicationsAdmin(db.session))
-
-"""def setup_admin(app):
-    admin = Admin(app, name="TaxAdmin Dashboard", template_mode="bootstrap3", index_view=CustomAdminIndexView())
-    admin.add_view(InboundMailsAdmin(db.session))"""

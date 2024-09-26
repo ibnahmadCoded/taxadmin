@@ -4,6 +4,10 @@ from datetime import datetime, timedelta
 from . import db
 
 class CustomAdminIndexView(AdminIndexView):
+    def __init__(self, name=None, category=None, endpoint=None, url=None, template='admin/index.html', menu_class_name=None, menu_icon_type=None, menu_icon_value=None):
+        super(CustomAdminIndexView, self).__init__(name, category, endpoint, url, template, menu_class_name, menu_icon_type, menu_icon_value)
+        self.name = "Metrics"  # Set the display name here
+
     @expose('/')
     def index(self):
         # Import the model here to avoid circular imports
@@ -362,7 +366,7 @@ class CustomAdminIndexView(AdminIndexView):
             TCCApplications.date_tcc_issued >= start_of_year.date()
         ).count()
 
-
+        
         return self.render('metrics.html',
                            mails_today=mails_today,
                            mails_this_week=mails_this_week,

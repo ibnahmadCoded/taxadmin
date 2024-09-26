@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register New User</title>
+</head>
+<body>
+    <h1>Register New User</h1>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.username.label }}
+            {{ form.username() }}
+        </div>
+        <div>
+            {{ form.email.label }}
+            {{ form.email() }}
+        </div>
+        <div>
+            {{ form.password.label }}
+            {{ form.password() }}
+        </div>
+        <div>
+            {{ form.password2.label }}
+            {{ form.password2() }}
+        </div>
+        <div>
+            {{ form.is_superuser() }} {{ form.is_superuser.label }}
+        </div>
+        {{ form.submit() }}
+    </form>
+</body>
+</html>
