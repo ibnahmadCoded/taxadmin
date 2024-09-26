@@ -1,5 +1,6 @@
 from . import db
 from flask_admin import Admin
+from sqlalchemy import Numeric
 from flask_admin.contrib.sqla import ModelView
 from .admin_metrics import CustomAdminIndexView  # Import the custom admin view
 
@@ -26,13 +27,17 @@ class VAT(db.Model):
     company_name = db.Column(db.String(100), nullable=False)
     company_address = db.Column(db.Text, nullable=False)
     contact_number = db.Column(db.String(20), nullable=False)
-    amount = db.Column(db.String(100), nullable=False)
+    amount = db.Column(Numeric(precision=10, scale=2), nullable=False)  # Decimal field for amount with two decimal places
+    currency = db.Column(db.String(10), nullable=False)  # New field for currency
     bank = db.Column(db.String(100), nullable=False)
     period_covered = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.Date, nullable=False)
+    appointment_date = db.Column(db.Date, nullable=False)
+    receipt_date = db.Column(db.Date)
+    received = db.Column(db.Boolean, default=False)  
 
     def __repr__(self):
         return f"<VAT {self.company_name}>"
+
 
 class WHT(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -40,10 +45,13 @@ class WHT(db.Model):
     company_name = db.Column(db.String(100), nullable=False)
     company_address = db.Column(db.Text, nullable=False)
     contact_number = db.Column(db.String(20), nullable=False)
-    amount = db.Column(db.String(100), nullable=False)
+    amount = db.Column(Numeric(precision=10, scale=2), nullable=False)  # Decimal field for amount with two decimal places
+    currency = db.Column(db.String(10), nullable=False)  # New field for currency
     bank = db.Column(db.String(100), nullable=False)
     period_covered = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.Date, nullable=False)
+    appointment_date = db.Column(db.Date, nullable=False)
+    receipt_date = db.Column(db.Date)
+    received = db.Column(db.Boolean, default=False) 
 
     def __repr__(self):
         return f"<WHT {self.company_name}>"
@@ -106,11 +114,13 @@ class DocumentDispatch(db.Model):
 
 class AnnualReturns(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date_return_received = db.Column(db.Date, nullable=False)
     tin = db.Column(db.String(100), nullable=False)
     company_name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.Text, nullable=False)
     tax_period = db.Column(db.String(50), nullable=False)
+    appointment_date = db.Column(db.Date, nullable=False)
+    receipt_date = db.Column(db.Date)
+    received = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f"<AnnualReturns {self.company_name}>"
@@ -157,10 +167,13 @@ class VATAdmin(ModelView):
         "company_name",
         "company_address",
         "contact_number",
+        "currency",
         "amount",
         "bank",
         "period_covered",
-        "date",
+        "appointment_date", 
+        "receipt_date",
+        "received" 
     ]
 
     # Set the name to be displayed in the admin interface
@@ -175,10 +188,13 @@ class WHTAdmin(ModelView):
         "company_name",
         "company_address",
         "contact_number",
+        "currency",
         "amount",
         "bank",
         "period_covered",
-        "date",
+        "appointment_date", 
+        "receipt_date",
+        "received"
     ]
 
     # Set the name to be displayed in the admin interface
@@ -256,16 +272,18 @@ class DocumentDispatchAdmin(ModelView):
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(DocumentDispatch, session, **kwargs)
-        self.name = 'IDocument Dispatch'
+        self.name = 'Document Dispatch'
 
 # Annual Returns Admin View
 class AnnualReturnsAdmin(ModelView):
     form_columns = [
-        "date_return_received",
         "tin",
         "company_name",
         "address",
         "tax_period",
+        "appointment_date", 
+        "receipt_date",
+        "received"
     ]
 
     # Set the name to be displayed in the admin interface

@@ -1,98 +1,347 @@
 {% extends 'admin/base.html' %}
 
+{% block head %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    h1, h3 {
+        color: #343a40;
+    }
+    .table {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+    .table thead th {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+    }
+    .table tbody tr:hover {
+        background-color: #e9ecef;
+    }
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .container {
+        padding: 20px;
+    }
+    .row {
+        margin-bottom: 20px;
+    }
+    /* Color Coding for Different Periods */
+    .today {
+        background-color: #d1e7dd; /* Light Green */
+    }
+    .this-week {
+        background-color: #ffeeba; /* Light Yellow */
+    }
+    .this-month {
+        background-color: #cfe2ff; /* Light Blue */
+    }
+    .this-year {
+        background-color: #f8d7da; /* Light Red */
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="container mt-4">
-    <h1>Metrics</h1>
-    <div class="row">
+    <h1 class="text-center">Metrics Dashboard</h1>
+
+    <div class="row mt-4">
         <div class="col-md-6">
-            <h3>Inbound Mails</h3>
-            <ul class="list-unstyled">
-                <li><strong>Today:</strong> {{ mails_today }}</li>
-                <li><strong>This Week:</strong> {{ mails_this_week }}</li>
-                <li><strong>This Month:</strong> {{ mails_this_month }}</li>
-                <li><strong>This Year:</strong> {{ mails_this_year }}</li>
-            </ul>
-        </div>
-        <div class="col-md-6">
-            <h3>Top 5 Recipients (This Month)</h3>
+            <h3 align="center">Inbound Mails</h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Recipient</th>
+                        <th>Period</th>
                         <th>Count</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for recipient, count in recipient_counts_month %}
-                    <tr>
-                        <td>{{ recipient }}</td>
-                        <td>{{ count }}</td>
+                    <tr class="today">
+                        <td>Today</td>
+                        <td>{{ mails_today }}</td>
                     </tr>
-                    {% endfor %}
+                    <tr class="this-week">
+                        <td>This Week</td>
+                        <td>{{ mails_this_week }}</td>
+                    </tr>
+                    <tr class="this-month">
+                        <td>This Month</td>
+                        <td>{{ mails_this_month }}</td>
+                    </tr>
+                    <tr class="this-year">
+                        <td>This Year</td>
+                        <td>{{ mails_this_year }}</td>
+                    </tr>
                 </tbody>
             </table>
-            <h3>Top 5 Recipients (This Year)</h3>
+        </div>
+        <div class="col-md-6">
+            <h3 align="center">Pending Appointments</h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Recipient</th>
+                        <th>Period</th>
                         <th>Count</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for recipient, count in recipient_counts_year %}
-                    <tr>
-                        <td>{{ recipient }}</td>
-                        <td>{{ count }}</td>
+                    <tr class="today">
+                        <td>Today</td>
+                        <td>{{ pending_today }}</td>
                     </tr>
-                    {% endfor %}
+                    <tr class="this-week">
+                        <td>This Week</td>
+                        <td>{{ pending_this_week }}</td>
+                    </tr>
+                    <tr class="this-month">
+                        <td>This Month</td>
+                        <td>{{ pending_this_month }}</td>
+                    </tr>
+                    <tr class="this-year">
+                        <td>This Year</td>
+                        <td>{{ pending_this_year }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
     <div class="row mt-4">
         <div class="col-md-6">
-            <h3>Pending Appointments</h3>
-            <ul class="list-unstyled">
-                <li><strong>Today:</strong> {{ pending_today }}</li>
-                <li><strong>This Week:</strong> {{ pending_this_week }}</li>
-                <li><strong>This Month:</strong> {{ pending_this_month }}</li>
-                <li><strong>This Year:</strong> {{ pending_this_year }}</li>
-            </ul>
-        </div>
-        <div class="col-md-6">
-            <h3>Top 5 Companies (This Month)</h3>
+            <h3 align="center">VAT Totals</h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Company</th>
-                        <th>Count</th>
+                        <th>Period</th>
+                        <th>NGN</th>
+                        <th>USD</th>
+                        <th>EUR</th>
+                        <th>GBP</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for company, count in company_counts_month %}
-                    <tr>
-                        <td>{{ company }}</td>
-                        <td>{{ count }}</td>
+                    <tr class="this-month">
+                        <td>This Month</td>
+                        <td>{{ vat_totals_ngn_month }}</td>
+                        <td>{{ vat_totals_usd_month }}</td>
+                        <td>{{ vat_totals_eur_month }}</td>
+                        <td>{{ vat_totals_gbp_month }}</td>
                     </tr>
-                    {% endfor %}
+                    <tr class="this-year">
+                        <td>This Year</td>
+                        <td>{{ vat_totals_ngn_year }}</td>
+                        <td>{{ vat_totals_usd_year }}</td>
+                        <td>{{ vat_totals_eur_year }}</td>
+                        <td>{{ vat_totals_gbp_year }}</td>
+                    </tr>
                 </tbody>
             </table>
-            <h3>Top 5 Companies (This Year)</h3>
+        </div>
+        <div class="col-md-6">
+            <h3 align="center">WHT Totals</h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Company</th>
+                        <th>Period</th>
+                        <th>NGN</th>
+                        <th>USD</th>
+                        <th>EUR</th>
+                        <th>GBP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="this-month">
+                        <td>This Month</td>
+                        <td>{{ wht_totals_ngn_month }}</td>
+                        <td>{{ wht_totals_usd_month }}</td>
+                        <td>{{ wht_totals_eur_month }}</td>
+                        <td>{{ wht_totals_gbp_month }}</td>
+                    </tr>
+                    <tr class="this-year">
+                        <td>This Year</td>
+                        <td>{{ wht_totals_ngn_year }}</td>
+                        <td>{{ wht_totals_usd_year }}</td>
+                        <td>{{ wht_totals_eur_year }}</td>
+                        <td>{{ wht_totals_gbp_year }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3 align="center">VAT Summary</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Period</th>
                         <th>Count</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for company, count in company_counts_year %}
-                    <tr>
-                        <td>{{ company }}</td>
-                        <td>{{ count }}</td>
+                    <tr class="today">
+                        <td>Today</td>
+                        <td>{{ vat_today }}</td>
                     </tr>
-                    {% endfor %}
+                    <tr class="this-week">
+                        <td>This Week</td>
+                        <td>{{ vat_this_week }}</td>
+                    </tr>
+                    <tr class="this-month">
+                        <td>This Month</td>
+                        <td>{{ vat_this_month }}</td>
+                    </tr>
+                    <tr class="this-year">
+                        <td>This Year</td>
+                        <td>{{ vat_this_year }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h3 align="center">WHT Summary</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="today">
+                        <td>Today</td>
+                        <td>{{ wht_today }}</td>
+                    </tr>
+                    <tr class="this-week">
+                        <td>This Week</td>
+                        <td>{{ wht_this_week }}</td>
+                    </tr>
+                    <tr class="this-month">
+                        <td>This Month</td>
+                        <td>{{ wht_this_month }}</td>
+                    </tr>
+                    <tr class="this-year">
+                        <td>This Year</td>
+                        <td>{{ wht_this_year }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3 align="center">File Metrics</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Today</th>
+                        <th>This Week</th>
+                        <th>This Month</th>
+                        <th>This Year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Outgoing Files</td>
+                        <td class="today">{{ outgoing_files_today }}</td>
+                        <td class="this-week">{{ outgoing_files_this_week }}</td>
+                        <td class="this-month">{{ outgoing_files_this_month }}</td>
+                        <td class="this-year">{{ outgoing_files_this_year }}</td>
+                    </tr>
+                    <tr>
+                        <td>Incoming Files</td>
+                        <td class="today">{{ incoming_files_today }}</td>
+                        <td class="this-week">{{ incoming_files_this_week }}</td>
+                        <td class="this-month">{{ incoming_files_this_month }}</td>
+                        <td class="this-year">{{ incoming_files_this_year }}</td>
+                    </tr>
+                    <tr>
+                        <td>New File Openings</td>
+                        <td class="today">{{ new_file_openings_today }}</td>
+                        <td class="this-week">{{ new_file_openings_this_week }}</td>
+                        <td class="this-month">{{ new_file_openings_this_month }}</td>
+                        <td class="this-year">{{ new_file_openings_this_year }}</td>
+                    </tr>
+                    <tr>
+                        <td>Document Dispatch</td>
+                        <td class="today">{{ document_dispatch_today }}</td>
+                        <td class="this-week">{{ document_dispatch_this_week }}</td>
+                        <td class="this-month">{{ document_dispatch_this_month }}</td>
+                        <td class="this-year">{{ document_dispatch_this_year }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3 align="center">Annual Returns Summary</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="today">
+                        <td>Today</td>
+                        <td>{{ annual_returns_today }}</td>
+                    </tr>
+                    <tr class="this-week">
+                        <td>This Week</td>
+                        <td>{{ annual_returns_this_week }}</td>
+                    </tr>
+                    <tr class="this-month">
+                        <td>This Month</td>
+                        <td>{{ annual_returns_this_month }}</td>
+                    </tr>
+                    <tr class="this-year">
+                        <td>This Year</td>
+                        <td>{{ annual_returns_this_year }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3 align="center">TCC Applications Summary</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="today">
+                        <td>Today</td>
+                        <td>{{ tcc_applications_today }}</td>
+                    </tr>
+                    <tr class="this-week">
+                        <td>This Week</td>
+                        <td>{{ tcc_applications_this_week }}</td>
+                    </tr>
+                    <tr class="this-month">
+                        <td>This Month</td>
+                        <td>{{ tcc_applications_this_month }}</td>
+                    </tr>
+                    <tr class="this-year">
+                        <td>This Year</td>
+                        <td>{{ tcc_applications_this_year }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
