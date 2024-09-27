@@ -26,6 +26,17 @@ class UserAdmin(SecureModelView):
     form_excluded_columns = ['password_hash']
     column_auto_select_related = True
 
+    # Fields that can be searched
+    column_searchable_list = ['username', 'email']
+
+    # Fields that can be filtered
+    column_filters = ['is_superuser']
+
+    # Column formatters for boolean fields
+    column_formatters = {
+        'is_superuser': lambda v, c, m, p: '✔️' if m.is_superuser else '❌',
+    }
+
     # Override the scaffold_form method to include a password field
     def scaffold_form(self):
         form_class = super(UserAdmin, self).scaffold_form()
@@ -88,6 +99,17 @@ class InboundMailsAdmin(SecureModelView):
         "received",      
     ]
 
+    # Fields that can be searched
+    column_searchable_list = ['company_name', 'company_tin', 'company_address', 'contact_number', 'letter_title', 'recipient']
+
+    # Fields that can be filtered
+    column_filters = ['appointment_date', 'receipt_date', 'received', 'office', 'recipient']
+
+    # Column formatters for boolean fields
+    column_formatters = {
+        'received': lambda v, c, m, p: '✔️' if m.received else '❌',
+    }
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(InboundMails, session, **kwargs)
@@ -108,6 +130,17 @@ class VATAdmin(SecureModelView):
         "receipt_date",
         "received" 
     ]
+
+    # Fields that can be searched
+    column_searchable_list = ['tin', 'company_name', 'company_address', 'contact_number', 'bank']
+
+    # Fields that can be filtered
+    column_filters = ['appointment_date', 'receipt_date', 'received', 'currency', 'period_covered', 'bank']
+
+    # Column formatters for boolean fields
+    column_formatters = {
+        'received': lambda v, c, m, p: '✔️' if m.received else '❌',
+    }
 
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
@@ -130,6 +163,17 @@ class WHTAdmin(SecureModelView):
         "received"
     ]
 
+    # Fields that can be searched
+    column_searchable_list = ['tin', 'company_name', 'company_address', 'contact_number', 'bank']
+
+    # Fields that can be filtered
+    column_filters = ['appointment_date', 'receipt_date', 'received', 'currency', 'period_covered']
+
+    # Column formatters for boolean fields
+    column_formatters = {
+        'received': lambda v, c, m, p: '✔️' if m.received else '❌',
+    }
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(WHT, session, **kwargs)
@@ -150,6 +194,21 @@ class OutgoingFilesAdmin(SecureModelView):
         "sent_by",
         "date",
     ]
+
+    # Fields that can be searched
+    column_searchable_list = ['tin', 'company_name', 'office_transferred_to', 'sent_by']
+
+    # Fields that can be filtered
+    column_filters = ['date', 'pnj', 'assmt', 'vat', 'wht', 'coll', 'sent_by']
+
+    # Column formatters for boolean fields
+    column_formatters = {
+        'pnj': lambda v, c, m, p: '✔️' if m.pnj else '❌',
+        'assmt': lambda v, c, m, p: '✔️' if m.assmt else '❌',
+        'vat': lambda v, c, m, p: '✔️' if m.vat else '❌',
+        'wht': lambda v, c, m, p: '✔️' if m.wht else '❌',
+        'coll': lambda v, c, m, p: '✔️' if m.coll else '❌'
+    }
 
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
@@ -172,6 +231,21 @@ class IncomingFilesAdmin(SecureModelView):
         "date",
     ]
 
+    # Fields that can be searched
+    column_searchable_list = ['tin', 'company_name', 'office_transferred_from', 'received_by']
+
+    # Fields that can be filtered
+    column_filters = ['date', 'pnj', 'assmt', 'vat', 'wht', 'coll', 'received_by']
+
+    # Column formatters for boolean fields
+    column_formatters = {
+        'pnj': lambda v, c, m, p: '✔️' if m.pnj else '❌',
+        'assmt': lambda v, c, m, p: '✔️' if m.assmt else '❌',
+        'vat': lambda v, c, m, p: '✔️' if m.vat else '❌',
+        'wht': lambda v, c, m, p: '✔️' if m.wht else '❌',
+        'coll': lambda v, c, m, p: '✔️' if m.coll else '❌'
+    }
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(IncomingFiles, session, **kwargs)
@@ -187,6 +261,12 @@ class NewFileOpeningAdmin(SecureModelView):
         "date",
     ]
 
+    # Fields that can be searched
+    column_searchable_list = ['tin', 'company_name', 'file_type']
+
+    # Fields that can be filtered
+    column_filters = ['date', 'opened_by']
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(NewFileOpening, session, **kwargs)
@@ -201,6 +281,12 @@ class DocumentDispatchAdmin(SecureModelView):
         "date_of_dispatch",
         "date_of_acknowledgement",
     ]
+
+    # Fields that can be searched
+    column_searchable_list = ['company_name', 'item']
+
+    # Fields that can be filtered
+    column_filters = ['date_of_dispatch', 'date_of_acknowledgement']
 
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
@@ -218,6 +304,16 @@ class AnnualReturnsAdmin(SecureModelView):
         "receipt_date",
         "received"
     ]
+
+    # Fields that can be searched
+    column_searchable_list = ['tin', 'company_name', 'tax_period']
+
+    # Fields that can be filtered
+    column_filters = ['tax_period', 'appointment_date', 'received']
+
+    column_formatters = {
+        'received': lambda v, c, m, p: '✔️' if m.received else '❌'
+    }
 
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
@@ -238,6 +334,16 @@ class TCCApplicationsAdmin(SecureModelView):
         "date_tcc_issued",
     ]
 
+    # Fields that can be searched
+    column_searchable_list = ['tin', 'company_name', 'date_tcc_issued', 'date_application_received']
+
+    # Fields that can be filtered
+    column_filters = ['tcc_granted', 'date_tcc_issued', 'date_application_received']
+
+    column_formatters = {
+        'tcc_granted': lambda v, c, m, p: '✔️' if m.tcc_granted else '❌'
+    }
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(TCCApplications, session, **kwargs)
@@ -248,12 +354,12 @@ def setup_admin(app):
     admin = Admin(app, name="TaxAdmin Dashboard", template_mode="bootstrap3", index_view=SecureCustomAdminIndexView(db.session))
     
     # Add each admin view for all models
+    admin.add_view(TCCApplicationsAdmin(db.session))
+
     admin.add_view(OutgoingFilesAdmin(db.session, category='Files'))
     admin.add_view(IncomingFilesAdmin(db.session, category='Files'))
     admin.add_view(NewFileOpeningAdmin(db.session, category='Files'))
     admin.add_view(DocumentDispatchAdmin(db.session, category='Files'))
-
-    admin.add_view(TCCApplicationsAdmin(db.session))
 
     admin.add_view(InboundMailsAdmin(db.session, category='External Correspondence'))  # Existing
     admin.add_view(VATAdmin(db.session, category='External Correspondence'))

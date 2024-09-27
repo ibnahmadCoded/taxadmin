@@ -7,7 +7,7 @@ class InboundMailAppointmentForm(FlaskForm):
     company_tin = StringField('Company TIN', validators=[DataRequired()])
     company_address = TextAreaField('Company Address', validators=[DataRequired()])
     contact_number = StringField('Contact Number', validators=[DataRequired()])
-    letter_title = StringField('Letter Title', validators=[Optional()])
+    letter_title = StringField('Letter Title (Subject of the Letter)', validators=[Optional()])
     appointment_date = DateField('Appointment Date', format='%Y-%m-%d', validators=[DataRequired()])
     office = SelectField('Office', choices=[('Large Tax Office (Oil & Gas) Services', 'Large Tax Office (Oil & Gas) Services')], validators=[DataRequired()])
     
