@@ -110,6 +110,9 @@ class InboundMailsAdmin(SecureModelView):
         'received': lambda v, c, m, p: '✔️' if m.received else '❌',
     }
 
+    # Default sorting order
+    column_default_sort = ('receipt_date', True)
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(InboundMails, session, **kwargs)
@@ -142,6 +145,9 @@ class VATAdmin(SecureModelView):
         'received': lambda v, c, m, p: '✔️' if m.received else '❌',
     }
 
+    # Default sorting order
+    column_default_sort = ('receipt_date', True)
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(VAT, session, **kwargs)
@@ -173,6 +179,9 @@ class WHTAdmin(SecureModelView):
     column_formatters = {
         'received': lambda v, c, m, p: '✔️' if m.received else '❌',
     }
+
+    # Default sorting order
+    column_default_sort = ('receipt_date', True)
 
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
@@ -210,6 +219,9 @@ class OutgoingFilesAdmin(SecureModelView):
         'coll': lambda v, c, m, p: '✔️' if m.coll else '❌'
     }
 
+    # Default sorting order
+    column_default_sort = ('date', True)
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(OutgoingFiles, session, **kwargs)
@@ -245,6 +257,9 @@ class IncomingFilesAdmin(SecureModelView):
         'wht': lambda v, c, m, p: '✔️' if m.wht else '❌',
         'coll': lambda v, c, m, p: '✔️' if m.coll else '❌'
     }
+
+    # Default sorting order
+    column_default_sort = ('date', True)
 
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
@@ -288,6 +303,9 @@ class DocumentDispatchAdmin(SecureModelView):
     # Fields that can be filtered
     column_filters = ['date_of_dispatch', 'date_of_acknowledgement']
 
+    # Default sorting order
+    column_default_sort = ('date_of_dispatch', True)
+
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
         super().__init__(DocumentDispatch, session, **kwargs)
@@ -314,6 +332,9 @@ class AnnualReturnsAdmin(SecureModelView):
     column_formatters = {
         'received': lambda v, c, m, p: '✔️' if m.received else '❌'
     }
+
+    # Default sorting order
+    column_default_sort = ('receipt_date', True)
 
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
@@ -343,6 +364,9 @@ class TCCApplicationsAdmin(SecureModelView):
     column_formatters = {
         'tcc_granted': lambda v, c, m, p: '✔️' if m.tcc_granted else '❌'
     }
+
+    # Default sorting order
+    column_default_sort = ('date_application_received', True)
 
     # Set the name to be displayed in the admin interface
     def __init__(self, session, **kwargs):
