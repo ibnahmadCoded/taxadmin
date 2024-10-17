@@ -19,6 +19,11 @@ class CustomAdminIndexView(AdminIndexView):
         start_of_month = today.replace(day=1)
         start_of_year = today.replace(month=1, day=1)
 
+        # Calculate the start and end dates of the previous month
+        first_day_of_current_month = today.replace(day=1)
+        last_day_of_previous_month = first_day_of_current_month - timedelta(days=1)
+        start_of_previous_month = last_day_of_previous_month.replace(day=1)
+
         # Count the received mails per day, week, month, and year
         mails_today = InboundMails.query.filter(
             InboundMails.receipt_date == today.date(),
@@ -229,6 +234,13 @@ class CustomAdminIndexView(AdminIndexView):
             VAT.received == True  # noqa: E712
         ).count()
 
+        # VAT - Previous Month
+        vat_previous_month = VAT.query.filter(
+            VAT.receipt_date >= start_of_previous_month.date(),
+            VAT.receipt_date <= last_day_of_previous_month.date(),
+            VAT.received == True  # noqa: E712
+        ).count()
+
         vat_this_month = VAT.query.filter(
             VAT.receipt_date>= start_of_month.date(),
             VAT.received == True  # noqa: E712
@@ -252,6 +264,13 @@ class CustomAdminIndexView(AdminIndexView):
 
         wht_this_month = WHT.query.filter(
             WHT.receipt_date>= start_of_month.date(),
+            WHT.received == True  # noqa: E712
+        ).count()
+
+        # WHT - Previous Month
+        wht_previous_month = WHT.query.filter(
+            WHT.receipt_date >= start_of_previous_month.date(),
+            WHT.receipt_date <= last_day_of_previous_month.date(),
             WHT.received == True  # noqa: E712
         ).count()
 
@@ -366,6 +385,132 @@ class CustomAdminIndexView(AdminIndexView):
             TCCApplications.date_tcc_issued >= start_of_year.date()
         ).count()
 
+        # Consolidate pending counts for the previous month
+        pending_previous_month = (
+            InboundMails.query.filter(
+                InboundMails.appointment_date >= start_of_previous_month.date(),
+                InboundMails.appointment_date <= last_day_of_previous_month.date(),
+                InboundMails.received == False  # noqa: E712
+            ).count() +
+            VAT.query.filter(
+                VAT.appointment_date >= start_of_previous_month.date(),
+                VAT.appointment_date <= last_day_of_previous_month.date(),
+                VAT.received == False  # noqa: E712
+            ).count() +
+            WHT.query.filter(
+                WHT.appointment_date >= start_of_previous_month.date(),
+                WHT.appointment_date <= last_day_of_previous_month.date(),
+                WHT.received == False  # noqa: E712
+            ).count() +
+            AnnualReturns.query.filter(
+                AnnualReturns.appointment_date >= start_of_previous_month.date(),
+                AnnualReturns.appointment_date <= last_day_of_previous_month.date(),
+                AnnualReturns.received == False  # noqa: E712
+            ).count()
+        )
+
+        # Inbound Mails - Previous Month
+        mails_previous_month = InboundMails.query.filter(
+            InboundMails.receipt_date >= start_of_previous_month.date(),
+            InboundMails.receipt_date <= last_day_of_previous_month.date(),
+            InboundMails.received == True  # noqa: E712
+        ).count()
+
+        # VAT Metrics - Previous Month
+        vat_totals_ngn_previous_month = db.session.query(db.func.sum(VAT.amount)).filter(
+            VAT.receipt_date >= start_of_previous_month.date(),
+            VAT.receipt_date <= last_day_of_previous_month.date(),
+            VAT.currency == 'NGN',
+            VAT.received == True  # noqa: E712
+        ).scalar() or 0
+
+        vat_totals_usd_previous_month = db.session.query(db.func.sum(VAT.amount)).filter(
+            VAT.receipt_date >= start_of_previous_month.date(),
+            VAT.receipt_date <= last_day_of_previous_month.date(),
+            VAT.currency == 'USD',
+            VAT.received == True  # noqa: E712
+        ).scalar() or 0
+
+        vat_totals_eur_previous_month = db.session.query(db.func.sum(VAT.amount)).filter(
+            VAT.receipt_date >= start_of_previous_month.date(),
+            VAT.receipt_date <= last_day_of_previous_month.date(),
+            VAT.currency == 'EUR',
+            VAT.received == True  # noqa: E712
+        ).scalar() or 0
+
+        vat_totals_gbp_previous_month = db.session.query(db.func.sum(VAT.amount)).filter(
+            VAT.receipt_date >= start_of_previous_month.date(),
+            VAT.receipt_date <= last_day_of_previous_month.date(),
+            VAT.currency == 'GBP',
+            VAT.received == True  # noqa: E712
+        ).scalar() or 0
+
+        # WHT Metrics - Previous Month
+        wht_totals_ngn_previous_month = db.session.query(db.func.sum(WHT.amount)).filter(
+            WHT.receipt_date >= start_of_previous_month.date(),
+            WHT.receipt_date <= last_day_of_previous_month.date(),
+            WHT.currency == 'NGN',
+            WHT.received == True  # noqa: E712
+        ).scalar() or 0
+
+        wht_totals_usd_previous_month = db.session.query(db.func.sum(WHT.amount)).filter(
+            WHT.receipt_date >= start_of_previous_month.date(),
+            WHT.receipt_date <= last_day_of_previous_month.date(),
+            WHT.currency == 'USD',
+            WHT.received == True  # noqa: E712
+        ).scalar() or 0
+
+        wht_totals_eur_previous_month = db.session.query(db.func.sum(WHT.amount)).filter(
+            WHT.receipt_date >= start_of_previous_month.date(),
+            WHT.receipt_date <= last_day_of_previous_month.date(),
+            WHT.currency == 'EUR',
+            WHT.received == True  # noqa: E712
+        ).scalar() or 0
+
+        wht_totals_gbp_previous_month = db.session.query(db.func.sum(WHT.amount)).filter(
+            WHT.receipt_date >= start_of_previous_month.date(),
+            WHT.receipt_date <= last_day_of_previous_month.date(),
+            WHT.currency == 'GBP',
+            WHT.received == True  # noqa: E712
+        ).scalar() or 0
+
+        # Outgoing Files - Previous Month
+        outgoing_files_previous_month = OutgoingFiles.query.filter(
+            OutgoingFiles.date >= start_of_previous_month.date(),
+            OutgoingFiles.date <= last_day_of_previous_month.date()
+        ).count()
+
+        # Incoming Files - Previous Month
+        incoming_files_previous_month = IncomingFiles.query.filter(
+            IncomingFiles.date >= start_of_previous_month.date(),
+            IncomingFiles.date <= last_day_of_previous_month.date()
+        ).count()
+
+        # New File Openings - Previous Month
+        new_file_openings_previous_month = NewFileOpening.query.filter(
+            NewFileOpening.date >= start_of_previous_month.date(),
+            NewFileOpening.date <= last_day_of_previous_month.date()
+        ).count()
+
+        # Document Dispatch - Previous Month
+        document_dispatch_previous_month = DocumentDispatch.query.filter(
+            DocumentDispatch.date_of_dispatch >= start_of_previous_month.date(),
+            DocumentDispatch.date_of_dispatch <= last_day_of_previous_month.date()
+        ).count()
+
+        # Annual Returns - Previous Month
+        annual_returns_previous_month = AnnualReturns.query.filter(
+            AnnualReturns.receipt_date >= start_of_previous_month.date(),
+            AnnualReturns.receipt_date <= last_day_of_previous_month.date(),
+            AnnualReturns.received == True  # noqa: E712
+        ).count()
+
+        # TCC Applications - Previous Month
+        tcc_applications_previous_month = TCCApplications.query.filter(
+            TCCApplications.date_tcc_issued >= start_of_previous_month.date(),
+            TCCApplications.date_tcc_issued <= last_day_of_previous_month.date()
+        ).count()
+
         
         return self.render('metrics.html',
                            mails_today=mails_today,
@@ -434,4 +579,26 @@ class CustomAdminIndexView(AdminIndexView):
                            tcc_applications_today=tcc_applications_today,
                            tcc_applications_this_week=tcc_applications_this_week,
                            tcc_applications_this_month=tcc_applications_this_month,
-                           tcc_applications_this_year=tcc_applications_this_year,)
+                           tcc_applications_this_year=tcc_applications_this_year,
+                           
+                           mails_previous_month=mails_previous_month,
+                           pending_previous_month=pending_previous_month,
+
+                           vat_totals_ngn_previous_month=vat_totals_ngn_previous_month,
+                           vat_totals_usd_previous_month=vat_totals_usd_previous_month,
+                           vat_totals_eur_previous_month=vat_totals_eur_previous_month,
+                           vat_totals_gbp_previous_month=vat_totals_gbp_previous_month,
+                           vat_previous_month=vat_previous_month,
+
+                           wht_totals_ngn_previous_month=wht_totals_ngn_previous_month,
+                           wht_totals_usd_previous_month=wht_totals_usd_previous_month,
+                           wht_totals_eur_previous_month=wht_totals_eur_previous_month,
+                           wht_totals_gbp_previous_month=wht_totals_gbp_previous_month,
+                           wht_previous_month=wht_previous_month,
+
+                           outgoing_files_previous_month=outgoing_files_previous_month,
+                           incoming_files_previous_month=incoming_files_previous_month,
+                           new_file_openings_previous_month=new_file_openings_previous_month,
+                           document_dispatch_previous_month=document_dispatch_previous_month,
+                           annual_returns_previous_month=annual_returns_previous_month,
+                           tcc_applications_previous_month=tcc_applications_previous_month)

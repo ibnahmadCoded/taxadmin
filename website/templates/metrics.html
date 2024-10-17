@@ -44,6 +44,9 @@
     .this-year {
         background-color: #f8d7da; /* Light Red */
     }
+    .previous-month {
+        background-color: #dee2e6;
+    }
 </style>
 {% endblock %}
 
@@ -69,6 +72,10 @@
                     <tr class="this-week">
                         <td>This Week</td>
                         <td>{{ mails_this_week }}</td>
+                    </tr>
+                    <tr class="previous-month">
+                        <td>Previous Month</td>
+                        <td>{{ mails_previous_month }}</td>
                     </tr>
                     <tr class="this-month">
                         <td>This Month</td>
@@ -99,6 +106,10 @@
                         <td>This Week</td>
                         <td>{{ pending_this_week }}</td>
                     </tr>
+                    <tr class="previous-month">
+                        <td>Previous Month</td>
+                        <td>{{ pending_previous_month }}</td>
+                    </tr>
                     <tr class="this-month">
                         <td>This Month</td>
                         <td>{{ pending_this_month }}</td>
@@ -126,6 +137,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr class="previous-month">
+                        <td>Previous Month</td>
+                        <td>{{ vat_totals_ngn_previous_month }}</td>
+                        <td>{{ vat_totals_usd_previous_month }}</td>
+                        <td>{{ vat_totals_eur_previous_month }}</td>
+                        <td>{{ vat_totals_gbp_previous_month }}</td>
+                    </tr>
                     <tr class="this-month">
                         <td>This Month</td>
                         <td>{{ vat_totals_ngn_month }}</td>
@@ -156,6 +174,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr class="previous-month">
+                        <td>Previous Month</td>
+                        <td>{{ wht_totals_ngn_previous_month }}</td>
+                        <td>{{ wht_totals_usd_previous_month }}</td>
+                        <td>{{ wht_totals_eur_previous_month }}</td>
+                        <td>{{ wht_totals_gbp_previous_month }}</td>
+                    </tr>
                     <tr class="this-month">
                         <td>This Month</td>
                         <td>{{ wht_totals_ngn_month }}</td>
@@ -194,6 +219,10 @@
                         <td>This Week</td>
                         <td>{{ vat_this_week }}</td>
                     </tr>
+                    <tr class="previous-month">
+                        <td>Previous Month</td>
+                        <td>{{ vat_previous_month }}</td>
+                    </tr>
                     <tr class="this-month">
                         <td>This Month</td>
                         <td>{{ vat_this_month }}</td>
@@ -223,6 +252,10 @@
                         <td>This Week</td>
                         <td>{{ wht_this_week }}</td>
                     </tr>
+                    <tr class="previous-month">
+                        <td>Previous Month</td>
+                        <td>{{ wht_previous_month }}</td>
+                    </tr>
                     <tr class="this-month">
                         <td>This Month</td>
                         <td>{{ wht_this_month }}</td>
@@ -245,6 +278,7 @@
                         <th>Type</th>
                         <th>Today</th>
                         <th>This Week</th>
+                        <th>Previous Month</th>
                         <th>This Month</th>
                         <th>This Year</th>
                     </tr>
@@ -255,12 +289,14 @@
                         <td class="today">{{ outgoing_files_today }}</td>
                         <td class="this-week">{{ outgoing_files_this_week }}</td>
                         <td class="this-month">{{ outgoing_files_this_month }}</td>
+                        <td class="previous-month">{{ outgoing_files_previous_month }}</td>
                         <td class="this-year">{{ outgoing_files_this_year }}</td>
                     </tr>
                     <tr>
                         <td>Incoming Files</td>
                         <td class="today">{{ incoming_files_today }}</td>
                         <td class="this-week">{{ incoming_files_this_week }}</td>
+                        <td class="previous-month">{{ incoming_files_previous_month }}</td>
                         <td class="this-month">{{ incoming_files_this_month }}</td>
                         <td class="this-year">{{ incoming_files_this_year }}</td>
                     </tr>
@@ -268,6 +304,7 @@
                         <td>New File Openings</td>
                         <td class="today">{{ new_file_openings_today }}</td>
                         <td class="this-week">{{ new_file_openings_this_week }}</td>
+                        <td class="previous-month">{{ new_file_openings_previous_month }}</td>
                         <td class="this-month">{{ new_file_openings_this_month }}</td>
                         <td class="this-year">{{ new_file_openings_this_year }}</td>
                     </tr>
@@ -275,15 +312,14 @@
                         <td>Document Dispatch</td>
                         <td class="today">{{ document_dispatch_today }}</td>
                         <td class="this-week">{{ document_dispatch_this_week }}</td>
+                        <td class="previous-month">{{ document_dispatch_previous_month }}</td>
                         <td class="this-month">{{ document_dispatch_this_month }}</td>
                         <td class="this-year">{{ document_dispatch_this_year }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <div class="row mt-4">
         <div class="col-md-6">
             <h3 align="center">Annual Returns Summary</h3>
             <table class="table table-bordered">
@@ -302,6 +338,10 @@
                         <td>This Week</td>
                         <td>{{ annual_returns_this_week }}</td>
                     </tr>
+                    <tr class="previous-month">
+                        <td>Previous Month</td>
+                        <td>{{ annual_returns_previous_month }}</td>
+                    </tr>
                     <tr class="this-month">
                         <td>This Month</td>
                         <td>{{ annual_returns_this_month }}</td>
@@ -313,6 +353,10 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="row mt-4">
+        
     </div>
 
     <div class="row mt-4">
@@ -333,6 +377,10 @@
                     <tr class="this-week">
                         <td>This Week</td>
                         <td>{{ tcc_applications_this_week }}</td>
+                    </tr>
+                    <tr class="previous-month">
+                        <td>Previous Month</td>
+                        <td>{{ tcc_applications_previous_month }}</td>
                     </tr>
                     <tr class="this-month">
                         <td>This Month</td>
